@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание учебных занятий ЦОО УРП АО "Мосводканал" </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Добавьте этот блок перед <div id="app"> -->
+<div id="datetime-widget">Загрузка времени...</div>
+    <div id="app">
+        <div id="days-nav">
+            <!-- Кнопки будут сгенерированы скриптом -->
+			<!-- <button onclick="loadDay('Пн')">Понедельник</button>
+            <button onclick="loadDay('Вт')">Вторник</button>
+            <button onclick="loadDay('Ср')">Среда</button>
+            <button onclick="loadDay('Чт')">Четверг</button>
+            <button onclick="loadDay('Пт')">Пятница</button>
+            <button onclick="loadDay('Сб')">Суббота</button>  -->
+		</div>
+        <table id="schedule-table">
+            <!-- Таблица будет заполнена динамически -->
+        </table>
+		<!-- Бегущая строка -->
+		<div id="ticker-container">    
+			<div id="ticker">
+				<span id="ticker-text">Загрузка данных строки...</span> <!-- Начальный текст -->
+			</div>	
+		</div>
+	</div>
+	
+	<script src="script.js"></script>
+</body>
+</html>

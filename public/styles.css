@@ -1,0 +1,452 @@
+/* Виджет даты/времени */
+#datetime-widget {
+    position: fixed;
+    bottom: 15px; /* Размещаем виджет внизу *//* было top */
+    right: 20px; /* Отступ справа */
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    font-family: 'Arial', sans-serif;
+    font-size: 17px;
+    color: #2c3e50;
+    border: 1px solid #ecf0f1;
+    backdrop-filter: blur(4px);
+    min-width: 280px;
+    text-align: center;
+	/* ... остальные стили ... */
+    opacity: 1; /*0;  Начальная прозрачность */
+	transform: translateY(0) scale(1);
+	transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1); /* Плавная кривая Безье */
+    /*animation: opacity 1s ease-in-out; /*fadeIn 0.5s ease-in-out forwards;  Анимация появления */
+}
+
+/* Класс для скрытия виджета */
+#datetime-widget.hidden {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9); /* Движение вниз + уменьшение */
+}
+
+/*@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Сдвиг вниз /
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Возврат на место /
+    }
+}
+*/
+
+@media (max-width: 768px) {
+    #datetime-widget {
+        bottom: 10px;
+        right: 10px;
+        font-size: 14px;
+        padding: 10px 15px;
+        min-width: 200px;
+    }
+}
+
+/* Сдвиг контента */
+body {
+    margin-top: 50px !important;
+}
+
+/* Основные стили для страницы */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0; /* Цвет фона страницы */
+}
+
+/* Контейнер для кнопок выбора дней недели */
+#days-nav {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Стили для кнопок */
+#days-nav button {
+    flex: 1; /* Кнопки занимают равное пространство */
+    margin-right: 10px;
+    padding: 15px 20px; /* Увеличиваем padding для удобства на тач-экране */
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 10px; /* Закругленные углы */
+    font-size: 18px; /* Увеличиваем шрифт */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Объемный эффект */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Убираем отступ у последней кнопки */
+#days-nav button:last-child {
+    margin-right: 0;
+}
+
+/* Эффекты при наведении и нажатии на кнопки */
+#days-nav button:hover {
+    background-color: #ddd;
+    transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+#days-nav button:active {
+    transform: scale(0.95); /* Эффект нажатия */
+}
+
+/* Стили для многострочных кнопок */
+#days-nav button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.3;
+    padding: 10px 5px;
+    min-height: 60px;
+}
+
+.day-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.day-date {
+    font-size: 14px;
+    color: #666;
+}
+
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Фиксируем ширину столбцов */
+}
+
+/* Фиксированная высота строк ШАПКА ТАБЛИЦЫ */ 
+th, td {
+    height: 20px; /* было 60px Высота строки (можно разместить 3 строки текста) */
+    padding: 10px;
+    text-align: center;   /* left; */
+    border: 1px solid black;
+}
+
+
+/* Фиксированная ширина для каждого столбца */
+th:nth-child(1), td:nth-child(1) { width: 8%; }		/*{ width: 10%; }  Аудитория */
+th:nth-child(2), td:nth-child(2) { width: 10%; }	/*{ width: 25%; }  Группа */
+th:nth-child(3), td:nth-child(3) { width: 30%; }	/*{ width: 10%; }  Профессия, курс */
+th:nth-child(4), td:nth-child(4) { width: 19%; }	/*{ width: 20%; }  Преподаватель */
+th:nth-child(5), td:nth-child(5) { width: 19%; }	/*{ width: 20%; }  Куратор */
+th:nth-child(6), td:nth-child(6) { width: 15%; }	/*{ width: 15%; }  Форма занятия */
+
+/* Стили для заголовков таблицы */
+th {
+    text-align: center; /* Центрирование текста */
+    background-color: #4CAF50; /* Зеленый фон */
+    color: white; /* Белый текст */
+    padding: 12px; /* Увеличенный отступ */
+    border: 1px solid black; /*#ddd Граница */
+}
+
+/* Стили для обычных ячеек (оставляем как было) */
+td {
+    text-align: left; /* Выравнивание по левому краю */
+    background-color: rgba(255, 255, 0, 0.5); /* Желтый фон */
+    height: 40px; /* было 60px */
+    padding: 10px;
+    border: 1px solid black;
+}
+/* Столбец "Аудитория" ******************************************************************************** */
+/* Стили для столбца "Аудитория" */
+td:nth-child(1) {
+    text-align: center; /* Центрирование текста */
+    font-size: 18px; /* Увеличиваем размер шрифта */
+    font-weight: bold; /* Жирный шрифт */
+}
+
+/* Пустые строки в столбце "Аудитория" */
+td:nth-child(1):empty {
+    color: #ccc; /* Бледный цвет текста */
+    font-style: italic; /* Курсив для пустых строк */
+}
+/* Столбец "Группа" ******************************************************************************** */
+/* Стили для столбца "Группа" */
+td:nth-child(2) {
+    text-align: center; /* Центрирование текста */
+    font-size: 18px; /* Увеличиваем размер шрифта */
+    padding: 10px; /* Добавляем отступы */
+	/* font-weight: bold; /* Жирный шрифт */
+}
+
+/* Номера групп (предположим, что они начинаются с цифры) */
+td:nth-child(2) {
+    color: #000; /* Черный цвет текста */
+    font-weight: bold; /* Жирный шрифт */
+}
+
+/* Столбец "Преподаватель" ******************************************************************************** */
+/* Стили для столбца "Преподаватель" */
+td:nth-child(4) {
+    text-align: center; /* Центрирование текста */
+    font-size: 14px; /* Увеличиваем размер шрифта */
+}
+
+/* Столбец "Куратор" ******************************************************************************** */
+/* Стили для столбца "Куратор" */
+td:nth-child(5) {
+    text-align: center; /* Центрирование текста */
+    font-size: 14px; /* Увеличиваем размер шрифта */
+}
+
+/* Значения в скобках */
+td:nth-child(5) small {
+    display: block; /* Переносим на новую строку */
+    font-size: 12px; /* Уменьшаем размер шрифта */
+    color: #666; /* Серый цвет для текста в скобках */
+}
+
+/* Динамические цвета фона и текста */
+td[data-bg-color] {
+    background-color: var(--bg-color); /* Используем переменную для фона */
+}
+
+td[data-text-color] {
+    color: var(--text-color); /* Используем переменную для цвета текста */
+}
+
+
+
+/* Если строка полностью заполнена */
+tr[data-full="true"] td {
+    background-color: #e5e58a; /* yellow Желтый фон 100% */
+}
+
+/* Если строка не полностью заполнена */
+tr[data-full="false"] td {
+    background-color: #bbbbbb; /*#f0f0f0 Цвет фона страницы */
+	color: #ccc; /* Бледный серый цвет текста */
+    font-style: italic; /* Курсив для пустых строк */
+}
+
+/* Цвета для ячейки "Форма занятия" */
+/* Увеличиваем специфичность для data-form */
+td[data-form="Лекция"] {
+    background-color: rgba(0, 255, 0, 0.25) !important; /* Зеленый 25% */
+    color: black !important; /* Черный текст */
+}
+
+td[data-form="Лекция-Трансляция"] {
+    background-color: #556B2F !important; /* Зелено-болотный 100% */
+    color: white !important; /* Белый текст для контраста */
+}
+
+td[data-form="Практика"] {
+    background-color: rgba(128, 128, 128, 0.75) !important; /* Серый 75% */
+    color: black !important; /* Черный текст */
+}
+
+td[data-form="Аттестация"] {
+    background-color: red !important; /* Красный фон */
+    color: yellow !important; /* Желтый текст */
+}
+
+td[data-form="Собеседование"] {
+    background-color: purple !important; /* Фиолетовый фон */
+    color: white !important; /* Белый текст */
+}
+
+/* Основные стили для модального окна */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px; /* Ширина модального окна */
+    max-height: 90vh; /* Ограничиваем высоту модального окна */
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto; /* Добавляем прокрутку, если содержимое не помещается */
+}
+
+/* Заголовок модального окна */
+.modal h2 {
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Контейнер для информации */
+.modal-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Графические области */
+.modal-image {
+    width: 100%;
+    height: 150px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+}
+
+/* Изображения */
+.modal-image img {
+    max-width: 100%;
+    max-height: 100px;
+    border-radius: 50%; /* Круглые изображения */
+}
+
+/* Подписи */
+.modal-image p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+/* Схема кабинета */
+.modal-scheme {
+    grid-column: span 2; /* Схема занимает две колонки */
+    max-height: 400px; /* Ограничиваем высоту области схемы 400px*/
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    overflow: auto; /* Добавляем прокрутку, если изображение не помещается */
+}
+
+/* Изображение схемы кабинета */
+.modal-scheme img {
+    max-width: 100%; /* Ограничиваем ширину изображения 100%*/
+    max-height: 80%; /* Ограничиваем высоту изображения 100%*/
+    object-fit: contain; /* Сохраняем пропорции изображения */
+}
+
+/* Кнопка закрытия */
+.modal button {
+    padding: 10px 20px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Затемнение фона */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Контейнер для бегущей строки */
+#ticker-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #54a2ff; /* Темный фон #333*/
+    color: #fff; /* Белый текст */
+    overflow: hidden; /* Скрываем всё, что выходит за пределы контейнера */
+    white-space: nowrap; /* Текст не переносится на новую строку */
+    position: relative; /* Для позиционирования */
+}
+
+/* Бегущая строка */
+#ticker {
+    display: inline-block;
+    padding-left: 100%; /* Начальное положение текста за пределами контейнера */
+    animation: ticker-scroll 35s linear infinite; /* Анимация бегущей строки */
+}
+
+/* Текст бегущей строки */
+#ticker-text {
+    display: inline-block;
+    padding-right: 100%; /* Обеспечиваем плавное появление текста */
+    font-size: 18px; /* Размер шрифта */
+    color: #fff; /* Цвет текста */
+    font-family: Arial, sans-serif; /* Шрифт */
+    font-weight: normal; /* Начертание */
+}
+
+/* Анимация для бегущей строки */
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(100%); /* Начальное положение: текст за пределами контейнера */
+    }
+    100% {
+        transform: translateX(-100%); /* Конечное положение: текст уходит за пределы контейнера */
+    }
+}
+ 
+ /* Праздничный фон */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Стили для иконки в виджете времени */
+#datetime-widget::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  margin: 8px auto 0;
+}
+
+/* Плавное появление праздничного фона */
+body.holiday-mode::before {
+  opacity: 0.25;
+  animation: sparkle 2s infinite alternate;
+}
+
+#datetime-widget.holiday-mode {
+  box-shadow: 0 0 15px gold;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle {
+  from { opacity: 0.15; }
+  to { opacity: 0.35; }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px rgba(255, 223, 0, 0.5);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(255, 223, 0, 0.8);
+  }
+}
+
+
+
